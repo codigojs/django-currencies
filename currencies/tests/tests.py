@@ -72,6 +72,17 @@ class TemplateTagTest(TestCase):
         )
         self.assertRaises(Currency.DoesNotExist, t.render, template.Context())
 
+    def test_convert_tag(self):
+        t = template.Template(self.html +
+            '{% convert 10 "EUR" "USD" %}'
+        )
+        self.assertEqual(t.render(template.Context()), '15.00')
+
+        t = template.Template(self.html +
+            '{% convert 10 "USD" "EUR" 4 %}'
+        )
+        self.assertEqual(t.render(template.Context()), '6.6667')
+
 
 class ContextTest(TestCase):
     """

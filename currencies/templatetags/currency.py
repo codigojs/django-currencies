@@ -4,7 +4,7 @@ from django import template
 from django.template.defaultfilters import stringfilter
 
 from currencies.models import Currency
-from currencies.utils import get_currency_code, calculate
+from currencies.utils import get_currency_code, calculate, convert as _convert
 
 register = template.Library()
 
@@ -42,6 +42,11 @@ def show_currency(price, code, decimals=2):
 @register.filter(name='currency')
 def do_currency(price, code):
     return calculate(price, code)
+
+
+@register.simple_tag
+def convert(price, from_code, to_code, decimals=2):
+    return _convert(price, from_code, to_code, decimals)
 
 
 def memoize_nullary(f):
